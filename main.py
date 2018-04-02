@@ -1,11 +1,10 @@
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from sklearn.metrics import precision_score
+
+from plotting_utils import plot_correlation
 
 # Load in the train and test datasets
 train = pd.read_csv('./input/train.csv')
@@ -39,21 +38,8 @@ to_count_embarked = filtered_train.Embarked
 number_of_categories_embarked = len(to_count_embarked.value_counts())
 
 
-# Plotting correlation
-corr = x_scaled.corr()
-# Generate a mask for the upper triangle
-mask = np.zeros_like(corr, dtype=np.bool)
-mask[np.triu_indices_from(mask)] = True
+plot_correlation(x_scaled)
 
-# Set up the matplotlib figure
-f, ax = plt.subplots(figsize=(11, 9))
-
-# Generate a custom diverging colormap
-cmap = sns.diverging_palette(220, 10, as_cmap=True)
-
-# Draw the heatmap with the mask and correct aspect ratio
-sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-            square=True, linewidths=.5, cbar_kws={"shrink": .5})
 
 gnb = GaussianNB()
 gnb.fit(X_train, y_train)
